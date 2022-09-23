@@ -15,3 +15,8 @@ variables:
 steps:
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
+
+- script: |
+    git tag -a tagName -m 'tag message' 
+    git push --tags
+  displayName: git tag
