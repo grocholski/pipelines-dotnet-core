@@ -20,6 +20,8 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
 
 - script: |
+    git config --global user.email "alexandre@example.com"
+    git config --global user.name "alexandre"
     git tag -a tagName -m 'tag message' 
     git push --tags
   displayName: git tag
