@@ -4,24 +4,27 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+    - master
 
 pool:
-  vmImage: ubuntu-latest
+    vmImage: ubuntu-latest
 
 variables:
-  buildConfiguration: 'Release'
+    - ${{ if eq(variables['build.sourceBranchName'], 'master') }}:
+          - template: Deploy/Variables/vars-prd.yml
+    - ${{ if eq(variables['build.sourceBranchName'], 'develop') }}:
+          - template: Deploy/Variables/vars-dev.yml
 
 steps:
-- checkout: self
-  persistCredentials: true
+    - checkout: self
+      persistCredentials: true
 
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+    - script: dotnet build --configuration $(buildConfiguration)
+      displayName: 'dotnet build $(buildConfiguration)'
 
-- script: |
-    git config --global user.email "alexandre@example.com"
-    git config --global user.name "alexandre"
-    git tag -a tagName -m 'tag message' 
-    git push --tags
-  displayName: git tag
+    - script: |
+          git config --global user.email "alexandre@example.com"
+          git config --global user.name "alexandre"
+          git tag -a tagName -m '$(tagMessage)'
+          git push --tags
+      displayName: git tag
