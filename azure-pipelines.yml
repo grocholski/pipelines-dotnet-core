@@ -25,6 +25,6 @@ steps:
     - script: |
           git config --global user.email "alexandre@example.com"
           git config --global user.name "alexandre"
-          git tag -a tagName -m '$(tagMessage)'
+          git tag -a $BUILD_BUILDNUMBER -m $TAGMESSAGE
           git push --tags
       displayName: git tag
